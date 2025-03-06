@@ -4,6 +4,29 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>YouTube Video Downloader</title>
+    <style>
+        /* Стиль для полосы прогресса */
+        #progress-bar {
+            width: 100%;
+            background-color: #f3f3f3;
+        }
+        #progress-bar span {
+            display: block;
+            height: 30px;
+            background-color: #4caf50;
+        }
+        /* Логирование */
+        #log {
+            margin-top: 20px;
+            font-family: monospace;
+            white-space: pre-wrap;
+            background-color: #f4f4f4;
+            padding: 10px;
+            border: 1px solid #ddd;
+            max-height: 200px;
+            overflow-y: scroll;
+        }
+    </style>
 </head>
 <body>
     <h1>YouTube Video Downloader</h1>
@@ -12,7 +35,13 @@
         <input type="text" id="url" name="url" required>
         <button type="submit">Download Video</button>
     </form>
-    <div id="player"></div>
+
+    <div id="progress-bar">
+        <span id="progress-bar-fill" style="width: 0%"></span>
+    </div>
+
+    <div id="log"></div>
+
     <script>
         // Показать плеер, если видео будет загружено
         const form = document.getElementById('download-form');
@@ -23,6 +52,27 @@
             const player = document.getElementById('player');
             player.innerHTML = `<iframe width="560" height="315" src="https://www.youtube.com/embed/${videoId}" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
         });
+
+        // Получение логов и обновление полосы загрузки
+        window.addEventListener('message', (event) => {
+            if (event.data.progress !== undefined) {
+                updateProgressBar(event.data.progress);
+                logMessage(`Downloading... ${event.data.progress}%`);
+            }
+        });
+
+        // Обновление полосы прогресса
+        function updateProgressBar(progress) {
+            const progressBar = document.getElementById('progress-bar-fill');
+            progressBar.style.width = `${progress}%`;
+        }
+
+        // Логирование
+        function logMessage(message) {
+            const logElement = document.getElementById('log');
+            logElement.textContent += message + "\n";
+            logElement.scrollTop = logElement.scrollHeight; // Автопрокрутка
+        }
     </script>
 </body>
 </html>

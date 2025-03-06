@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YouTube Video Downloader</title>
+</head>
+<body>
+    <h1>YouTube Video Downloader</h1>
+    <form id="download-form" action="/download" method="get">
+        <label for="url">Enter YouTube Video URL:</label>
+        <input type="text" id="url" name="url" required>
+        <button type="submit">Download Video</button>
+    </form>
+    <div id="player"></div>
+    <script>
+        // Показать плеер, если видео будет загружено
+        const form = document.getElementById('download-form');
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const url = document.getElementById('url').value;
+            const videoId = url.split('v=')[1].split('&')[0]; // Извлекаем ID видео
+            const player = document.getElementById('player');
+            player.innerHTML = `<iframe width="560" height="315" src="https://www.youtube.com/embed/${videoId}" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
+        });
+    </script>
+</body>
+</html>
